@@ -1,0 +1,54 @@
+{
+	"commands" : [
+	],
+	
+}
+
+/* JSON Data Frame. Returned by device */
+{
+	"email_id" 		: "testid@testurl.com",
+	"motion_status" : "1",
+	"device" : {
+		"imei"   : "990000862471854",
+		"number" : "+12345678910",
+	},
+	"gps" : {
+		"date" : {
+			"year"   : "2016",
+			"month"  : "08",
+			"day"    : "19",
+		},
+		"time" : {
+			"hour"   : "12",
+			"minute" : "00",
+			"second" : "00",
+			"am_pm"  : "AM",
+		},
+		"speed" 	 : "42",
+		"course" : {
+			"heading" : "21.014",
+			"direction" : "NNW",
+		},
+		"battery"    : "96",
+		"rssi"       : "-42",
+		"satellites" : "6",
+		"power" 	 : "BAT",
+		"sos" 		 : ""
+	},
+	"adc_1" : {
+		"value" 	: "",
+		"threshold" : "",
+	},
+	"adc_2" : {
+		"value" 	: "",
+		"threshold" : "",
+	},
+	"adc_3" : {
+		"value" 	: "",
+		"threshold" : "",
+	},
+	"sms" : {
+		"client_primary"   : "",
+		"client_secondary" : ""
+	}
+}
