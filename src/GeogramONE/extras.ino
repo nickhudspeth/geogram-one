@@ -2,7 +2,7 @@
 #define ASHTTP 2
 #define JSONBUFFERSIZE 4096
 
-const char phone_number[] = "+12345678910";
+char phone_number[] = "+12345678910";
 const char url[] = "http://mobilytedev.com/resq/app/insert_device_location_info";
 
 int sendJSON(int mode)
@@ -70,7 +70,7 @@ int sendJSON(int mode)
   {
     int len = output.length() * sizeof(char);
     char *buf = (char*) malloc(len);
-    output.toCharArray(len, buf);
+    output.toCharArray(buf, len);
     result = sim900.sendMessage(1, phone_number, buf);
     switch(result){
       case 0:
