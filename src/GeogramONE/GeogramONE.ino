@@ -12,6 +12,8 @@ under CC-SA v3 license.
 #include "eepromAnything.h"
 #include <ArduinoJson.h>
 
+#define ASSMS 1
+#define ASHTTP 2
 
 
 GeogramONE ggo;
@@ -77,6 +79,8 @@ void setup()
 	ggo.configureSpeed(&cmd3, &speedHyst, &speedLimit);
 	ggo.configureBreachParameters(&breachSpeed, &breachReps);
 	ggo.configureInterval(&timeInterval, &sleepTimeOn, &sleepTimeOff, &sleepTimeConfig);
+  Serial.begin(115200);
+  
 	if(sleepTimeConfig & 0x02)
 		bma250.enableInterrupts();
 	uint8_t swInt = EEPROM.read(IOSTATE0);
@@ -89,10 +93,21 @@ void setup()
 		PCintPort::attachInterrupt(10, &d10Interrupt, RISING);
 	if(swInt == 0x06)
 		PCintPort::attachInterrupt(10, &d10Interrupt, FALLING);
+  Serial.println("Finished setup.");
 }
 
 void loop()
 {
+  //Serial.println("k");
+  static int firstRun = 0;
+  if(!firstRun)
+  {
+    Serial.println("Before sendJSON");
+    sendJSON(ASSMS);
+     Serial.println("After sendJSON");
+    firstRun = 1;
+    
+  }
 	gps.getTheData(&lastValid);
 	if(call)
 	{
@@ -103,26 +118,27 @@ void loop()
 			if(smsData.smsDataValid)
 			{
 				if(!smsData.smsCmdNum)
-					cmd0 = 0x01;
+					;//cmd0 = 0x01;
 				else if(smsData.smsCmdNum == 1)
 					cmd1 = 0x01;
 				else if(smsData.smsCmdNum == 2)
-					command2();
+          command2();
 				else if(smsData.smsCmdNum == 3)
 					cmd3 = 0x01;
 				else if(smsData.smsCmdNum == 4)
-					command4();
+					;//command4();
 				else if(smsData.smsCmdNum == 5)
-					command5();
+					;//command5();
 				else if(smsData.smsCmdNum == 6)
-					command6();
+					;//command6();
 				else if(smsData.smsCmdNum == 7)
-					command7();
+					;//command7();
 			}
 		}
 	}
 	if(cmd0)
-		command0();
+		//command0();
+   ;
 	if(cmd1)
 		command1();
 	if(cmd3)

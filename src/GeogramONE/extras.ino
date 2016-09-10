@@ -17,11 +17,12 @@ int sendJSON(int mode)
   
   EEPROM_readAnything(RETURNADDCONFIG,email);
   root_json["email_id"] = email;
-
+  
   JsonObject& device_json = root_json.createNestedObject("device");
   char imei[16];
   sim900.getIMEI(imei);
   device_json["imei"] = String(imei);
+  
   device_json["number"] = String(smsData.smsNumber);
   
   JsonObject& gps_json = root_json.createNestedObject("gps");
@@ -34,6 +35,7 @@ int sendJSON(int mode)
   time_json["minute"] = String(lastValid.minute);
   time_json["second"] = String(lastValid.seconds);
   time_json["am_pm"] = (lastValid.amPM == 'a') ? "am" : "pm";
+  
   #if USESPEEDKNOTS
     gps_json["speed"] = String(lastValid.speedKnots);
   #endif
@@ -45,13 +47,16 @@ int sendJSON(int mode)
     course_json["heading"] = String(lastValid.course);
     course_json["direction"] = String(lastValid.courseDirection);
   #endif
-  gps_json["battery"] = String(max17043.getBatterySOC()/100);
-  gps_json["rssi"] = String(sim900.signalQuality(1));
+  //gps_json["battery"] = String(max17043.getBatterySOC()/100);
+  
+  //gps_json["rssi"] = String(sim900.signalQuality(1));
+  
   #if USESATELLITESUSED
     gps_json["satellites"] = String(lastValid.satellitesUsed);
   #endif
   gps_json["power"] = (charge == 1) ? "CHG" : "BAT";
   gps_json["sos"] = (digitalRead(4) == HIGH) ? "TRUE" : "FALSE";
+  
   JsonObject& adc1_json = root_json.createNestedObject("adc_1");
   adc1_json["value"] = String(analogRead(1));
   adc1_json["threshold"] = "";
@@ -64,14 +69,15 @@ int sendJSON(int mode)
   JsonObject& sms_json = root_json.createNestedObject("sms");
   sms_json["client_primary"] = "";
   sms_json["client_secondary"] = "";
-
-  outputSize = root_json.printTo(output);
+  
+  outputSize = root_json.prettyPrintTo(output);
   if(mode == ASSMS)
   {
     int len = output.length() * sizeof(char);
     char *buf = (char*) malloc(len);
     output.toCharArray(buf, len);
-    result = sim900.sendMessage(1, phone_number, buf);
+    //result = sim900.sendMessage(1, phone_number, buf);
+    Serial.println(output);
     switch(result){
       case 0:
         // Message sent successfully.
